@@ -1,10 +1,6 @@
 \# Redis-Based Token Bucket Rate Limiter
 
-
-
 A \*\*multi-server safe\*\* rate limiter built using the \*\*token bucket\*\* algorithm and \*\*Redis Lua scripting\*\* for atomic operations.
-
-
 
 This implementation ensures:
 
@@ -14,11 +10,7 @@ This implementation ensures:
 
 \- \*\*Scalability\*\*: Works across multiple processes and servers without race conditions.
 
-
-
 ---
-
-
 
 \## Features
 
@@ -38,11 +30,7 @@ This implementation ensures:
 
 &nbsp; - `ttl\_seconds` — Key expiration to prevent unbounded growth.
 
-
-
 ---
-
-
 
 \## Requirements
 
@@ -52,11 +40,7 @@ This implementation ensures:
 
 \- A running Redis instance.
 
-
-
 ---
-
-
 
 \## Installation
 
@@ -64,17 +48,13 @@ This implementation ensures:
 
 pip install redis
 
-
+```
 
 ---
-
-
 
 \## Usage
 
 from rate\_limiter import RedisRateLimiter
-
-
 
 \# Create a limiter for a specific user or endpoint
 
@@ -93,7 +73,6 @@ limiter = RedisRateLimiter(
 )
 
 
-
 \# Attempt a request
 
 allowed, tokens\_left = limiter.allow\_request(cost=1)
@@ -106,18 +85,13 @@ else:
 
 &nbsp;   print("Request denied. Rate limit exceeded.")
 
-
-
 ---
 
-
-
-\## How It Works
+## How It Works
 
 1. Refill Phase
 
 Calculates elapsed time since last request using Redis' TIME command, adds tokens at tokens\_per\_second rate, capped at max\_tokens.
-
 
 
 2\. Check Phase
@@ -125,11 +99,9 @@ Calculates elapsed time since last request using Redis' TIME command, adds token
 If available tokens ≥ request cost, allow the request and subtract the cost.
 
 
-
 3\. Persist Phase
 
 Store updated token count and timestamp in Redis, set TTL for automatic cleanup.
-
 
 
 All steps are executed atomically inside Redis using a Lua script, ensuring no race conditions even under heavy load from multiple servers.
